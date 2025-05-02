@@ -1,0 +1,17 @@
+{
+	"name": "qod-web",
+	"version": "1.1.0",
+	"private": true,
+	"scripts": {
+		"start": "node app.js"
+	},
+	"dependencies": {
+		"body-parser": "1.18.*",
+		"ejs": "2.5.x",
+		"express": "4.*",
+		"dateformat": "^3.0.*",
+		"request": "2.88.*"
+
+	},
+	"repository": {}
+}

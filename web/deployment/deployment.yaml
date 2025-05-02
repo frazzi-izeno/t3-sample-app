@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qod-web
+  labels:
+    app: qod-web
+    tier: ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qod-web
+  template:
+    metadata:
+      labels:
+        app: qod-web
+    spec:
+      containers:
+        - name: qod-web
+          image: default-route-openshift-image-registry.apps-crc.testing/shared-images/sample-apps-web:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: QOD_API_URL
+              value: "http://route-parental-dingo-testout.apps-crc.testing:8080"
