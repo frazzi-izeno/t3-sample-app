@@ -2,13 +2,6 @@
 
 # ✏️ Edit this list with your desired folders
 folders=(
-  "src"
-  "config"
-  "docs"
-  "tests"
-  "scripts/deploy"
-  "assets/images"
-  "assets/styles"
   "api"
   "web"
   "db"

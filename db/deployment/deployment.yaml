@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: qod-db
+  name: custom-db
   labels:
-    app: qod-db
+    app: custom-db
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: qod-db
+      app: custom-db
   template:
     metadata:
       labels:
-        app: qod-db
+        app: custom-db
     spec:
       containers:
-        - name: qod-db
-          image: default-route-openshift-image-registry.apps-crc.testing/shared-images/sample-apps-db:latest
+        - name: custom-db
+          image: default-route-openshift-image-registry.apps-crc.testing/shared-images/custom-app-db:latest
           imagePullPolicy: Always
           ports:
             - name: mysql
@@ -25,3 +25,23 @@ spec:
           env:
             - name: MYSQL_ROOT_PASSWORD
               value: root
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: custom-db
+  labels:
+    app: custom-db
+    tier: data
+spec:
+  type: ClusterIP
+  ports:
+    - name: mysql
+      port: 3306
+      targetPort: 3306
+      protocol: TCP 
+  selector:
+    app: custom-db

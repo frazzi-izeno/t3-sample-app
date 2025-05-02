@@ -1,23 +1,23 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: qod-api
+  name: custom-api
   labels:
-    app: qod-api
+    app: custom-api
     tier: api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: qod-api
+      app: custom-api
   template:
     metadata:
       labels:
-        app: qod-api
+        app: custom-api
     spec:
       containers:
-        - name: qod-api
-          image: ibmicpcoc/qod-api
+        - name: custom-api
+          image: default-route-openshift-image-registry.apps-crc.testing/shared-images/custom-app-api:latest
           ports:
             - name: http
               containerPort: 8080
@@ -31,3 +31,23 @@ spec:
               value: root
           imagePullPolicy: Always
       restartPolicy: Always
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: custom-api
+  labels:
+    app: custom-api
+    tier: api
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app: custom-api

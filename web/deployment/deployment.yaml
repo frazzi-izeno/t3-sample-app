@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: qod-web
+  name: custom-web
   labels:
-    app: qod-web
+    app: custom-web
     tier: ui
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: qod-web
+      app: custom-web
   template:
     metadata:
       labels:
-        app: qod-web
+        app: custom-web
     spec:
       containers:
-        - name: qod-web
-          image: default-route-openshift-image-registry.apps-crc.testing/shared-images/sample-apps-web:latest
+        - name: custom-web
+          image: default-route-openshift-image-registry.apps-crc.testing/shared-images/custom-app-web:latest
           imagePullPolicy: Always
           ports:
             - name: http
@@ -26,3 +26,34 @@ spec:
           env:
             - name: QOD_API_URL
               value: "http://route-parental-dingo-testout.apps-crc.testing:8080"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: custom-web
+  labels:
+    app: custom-web
+    tier: ui
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app: custom-web
+
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: custom-web
+spec:
+  path: /
+  to:
+    kind: Service
+    name: custom-web
+  port:
+    targetPort: http
